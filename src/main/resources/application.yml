@@ -1,0 +1,18 @@
+liquibase:
+  contexts: production,testing
+
+spring:
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    liquibase: INFO
+    org.springframework: ERROR
+    org.springframework.boot: ERROR
+    org.springframework.web: ERROR
+    org.springframework.boot.autoconfigure: ERROR
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE

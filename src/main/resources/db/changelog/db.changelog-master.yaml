@@ -1,0 +1,133 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Alexandre Carbenay
+      context: production
+      changes:
+        - createTable:
+            tableName: aggregate1
+            columns:
+            - column:
+                name: id
+                type: bigint
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column:
+                name: something
+                type: varchar(50)
+                constraints:
+                  nullable: false
+        - createTable:
+            tableName: aggregate2
+            columns:
+            - column:
+                name: id
+                type: bigint
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column:
+                name: value
+                type: varchar(50)
+                constraints:
+                  nullable: false
+        - createTable:
+            tableName: association
+            columns:
+            - column:
+                name: aggregate1_id
+                type: bigint
+                constraints:
+                  nullable: false
+                  references: aggregate1(id)
+                  foreignKeyName: FK_association_aggregate1
+            - column:
+                name: aggregate2_id
+                type: bigint
+                constraints:
+                  nullable: false
+                  references: aggregate2(id)
+                  foreignKeyName: FK_association_aggregate2
+            - column:
+                name: association_value
+                type: varchar(50)
+                constraints:
+                  nullable: false
+        - addPrimaryKey:
+            tableName: association
+            columnNames: aggregate1_id, aggregate2_id
+
+  - changeSet:
+      id: 1-testing
+      author: Alexandre Carbenay
+      context: testing
+      changes:
+        - insert:
+            tableName: aggregate1
+            columns:
+              - column:
+                  name: something
+                  value: aggregate1_1
+        - insert:
+            tableName: aggregate1
+            columns:
+              - column:
+                  name: something
+                  value: aggregate1_2
+        - insert:
+            tableName: aggregate2
+            columns:
+              - column:
+                  name: value
+                  value: aggregate2_1
+        - insert:
+            tableName: aggregate2
+            columns:
+              - column:
+                  name: value
+                  value: aggregate2_2
+        - insert:
+            tableName: aggregate2
+            columns:
+              - column:
+                  name: value
+                  value: aggregate2_3
+        - insert:
+            tableName: association
+            columns:
+              - column:
+                  name: association_value
+                  value: association_1_1
+              - column:
+                  name: aggregate1_id
+                  valueComputed: select id from aggregate1 where something = 'aggregate1_1'
+              - column:
+                  name: aggregate2_id
+                  valueComputed: select id from aggregate2 where value = 'aggregate2_1'
+        - insert:
+            tableName: association
+            columns:
+              - column:
+                  name: association_value
+                  value: association_1_2
+              - column:
+                  name: aggregate1_id
+                  valueComputed: select id from aggregate1 where something = 'aggregate1_1'
+              - column:
+                  name: aggregate2_id
+                  valueComputed: select id from aggregate2 where value = 'aggregate2_2'
+        - insert:
+            tableName: association
+            columns:
+              - column:
+                  name: association_value
+                  value: association_2_1
+              - column:
+                  name: aggregate1_id
+                  valueComputed: select id from aggregate1 where something = 'aggregate1_2'
+              - column:
+                  name: aggregate2_id
+                  valueComputed: select id from aggregate2 where value = 'aggregate2_1'
