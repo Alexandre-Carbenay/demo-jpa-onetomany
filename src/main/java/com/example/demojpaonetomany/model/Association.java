@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -17,6 +18,7 @@ import lombok.Value;
 @AllArgsConstructor
 @Entity
 @Table(name = "association")
+@IdClass(AssociationId.class)
 public class Association implements Serializable {
 
     private static final long serialVersionUID = 1L;
