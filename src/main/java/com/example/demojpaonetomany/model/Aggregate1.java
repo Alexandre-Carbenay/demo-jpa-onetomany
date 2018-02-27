@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -32,8 +31,7 @@ public class Aggregate1 {
     @Column
     private String                 something;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = { ALL }, orphanRemoval = true)
-    @JoinColumn(name = "aggregate1_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "aggregate1Id", cascade = { ALL }, orphanRemoval = true)
     private final Set<Association> associations = new HashSet<>();
 
     public Aggregate1(String something) {
@@ -41,8 +39,7 @@ public class Aggregate1 {
     }
 
     public boolean hasAssociation(Aggregate2 aggregate2) {
-        return associations.stream().filter(a -> a.getAggregate2Id().equals(aggregate2.getId())).findFirst()
-                .isPresent();
+        return findAssociation(aggregate2).isPresent();
     }
 
     public Set<Association> getAssociations() {

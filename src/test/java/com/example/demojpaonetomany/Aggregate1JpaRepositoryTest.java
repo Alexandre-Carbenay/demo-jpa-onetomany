@@ -37,4 +37,18 @@ public class Aggregate1JpaRepositoryTest {
         assertThat(savedAggregate1.hasAssociation(aggregate2)).isTrue();
     }
 
+    @Test
+    public void saveAggregate1RemoveExistingAssociation() {
+        long aggregate1Id = 1L;
+        Aggregate1 aggregate1 = aggregate1Repository.findOne(aggregate1Id);
+        assumeTrue("Unknown aggregate1 with id " + aggregate1Id, aggregate1 != null);
+        long aggregate2Id = 2L;
+        Aggregate2 aggregate2 = aggregate2Repository.findOne(aggregate2Id);
+        assumeTrue("Unknown aggregate2 with id " + aggregate2Id, aggregate2 != null);
+
+        aggregate1.removeAssociation(aggregate2);
+        Aggregate1 savedAggregate1 = aggregate1Repository.save(aggregate1);
+        assertThat(savedAggregate1.hasAssociation(aggregate2)).isFalse();
+    }
+
 }
